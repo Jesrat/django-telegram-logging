@@ -1,0 +1,8 @@
+__title__ = 'django-telegram-logging'
+__description__ = 'An app to send reports over Telegram API'
+__url__ = 'https://github.com/Jesrat/django-telegram-logging'
+__version__ = '1.0.1'
+__author__ = 'Josue Gomez'
+__author_email__ = 'jgomez@jesrat.com'
+__license__ = 'Apache 2.0'
+__copyright__ = 'Copyright 2022 Josue Gomez'

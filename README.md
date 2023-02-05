@@ -48,7 +48,7 @@ LOGGING = {
         ...
         'django': {
             'level': 'ERROR', 
-            'handlers': ['console', 'mail_admins', 'telegram']
+            'handlers': ['console', 'telegram']
         }
     }
 }

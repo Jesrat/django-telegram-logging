@@ -1,10 +1,8 @@
 import logging
 import requests
-from copy import copy
 from datetime import datetime
 from django.conf import settings
 from django.utils.module_loading import import_string
-
 
 token = settings.TELEGRAM_LOGGING_TOKEN
 chat = settings.TELEGRAM_LOGGING_CHAT
@@ -37,27 +35,26 @@ class TelegramHandler(logging.Handler):
         except Exception:
             request = None
 
-        # Since we add a nicely formatted traceback on our own, create a copy
-        # of the log record without the exception data.
-        no_exc_record = copy(record)
-        no_exc_record.exc_info = None
-        no_exc_record.exc_text = None
-
         if record.exc_info:
             exc_info = record.exc_info
         else:
             exc_info = (None, record.getMessage(), None)
 
+        exc_type = exc_info[0].__name__ if exc_info[0] else 'Exception'
+        message = f'{exc_type}({exc_info[1]})'
+        if request:
+            message += f' at "{request.path}"'
+
         reporter = self.reporter_class(request, *exc_info)
         html_message = reporter.get_traceback_html()
-        self.send_message(html_message)
+        self.send_message(message, html_message)
 
-    def send_message(self, html_message):
+    def send_message(self, message, html_message):
         try:
-            document_name = f'{datetime.now().strftime("%Y%m%d%H%M%S")}.{logging.getLevelName(self.level)}.html'
+            document_name = f'{datetime.now().strftime("%Y%m%d_%H%M%S")}.{logging.getLevelName(self.level)}.html'
             requests.post(
                 f'https://api.telegram.org/bot{token}/sendDocument',
-                data={'chat_id': chat},
+                data={'chat_id': chat, 'caption': message, 'parse_mode': 'HTML'},
                 files={'document': PseudoFile(html_message, document_name)}
             )
         except Exception as e:

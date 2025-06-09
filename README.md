@@ -32,7 +32,7 @@ TELEGRAM_LOGGING_TOKEN = 'XXXXXXX:XXXXXXXXXXXXXXXXX'
 TELEGRAM_LOGGING_CHAT = 12345678
 TELEGRAM_LOGGING_EMIT_ON_DEBUG = True
 ```
-Follow [django's documentation](https://docs.djangoproject.com/en/4.0/topics/logging/) to configure logging, add the 
+Follow [django's documentation](https://docs.djangoproject.com/en/5.2/topics/logging/) to configure logging, add the 
 telegram handler to the handlers configuration, and add at least one logger which will use that handler.
 ```py 
 LOGGING = {
